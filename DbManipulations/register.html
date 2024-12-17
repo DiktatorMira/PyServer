@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Регистрация пользователя</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .form-container {
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 30px;
+                width: 100%;
+                max-width: 400px;
+            }
+            .form-container h2 {
+                margin: 0 0 20px;
+                text-align: center;
+                color: #444;
+            }
+            .form-group { margin-bottom: 15px; }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #555;
+            }
+            input[type="text"], input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+                box-sizing: border-box;
+            }
+            input[type="text"]:focus, input[type="password"]:focus {
+                border-color: #007BFF;
+                outline: none;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+            input[type="submit"] {
+                background-color: #007BFF;
+                color: #fff;
+                border: none;
+                padding: 10px 15px;
+                width: 100%;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+            input[type="submit"]:hover { background-color: #0056b3; }
+            .form-footer {
+                margin-top: 15px;
+                text-align: center;
+                font-size: 14px;
+                color: #666;
+            }
+            .link-text {
+                text-decoration:none;
+                font-weight:bold;
+                color:#007BFF;
+                transition:.1s;
+            }
+            .link-text:hover { color:#0056b3; }
+        </style>
+    </head>
+    <body>
+        <div class="form-container">
+            <h2>Регистрация</h2>
+            <form action="/cgi-bin/register_user.py" method="post">
+                <div class="form-group">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                </div>
+                <input type="submit" value="Зарегистрироваться">
+            </form>
+            <div class="form-footer">
+                <p>Уже есть аккаунт? <a href="#" class="link-text">Войдите здесь</a></p>
+            </div>
+        </div>
+    </body>
+</html>
