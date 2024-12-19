@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule  ^api.+$  api1.py  [END,QSA]

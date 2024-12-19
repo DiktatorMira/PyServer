@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CGI-213</title>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                background-color: #f4f4f9; 
+                color: #333; 
+                margin: 0; 
+                padding: 0; 
+                display: flex; 
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center; 
+                height: 100vh; 
+            }
+            button { 
+                margin: 10px; 
+                padding: 10px 20px; 
+                background: #007BFF; 
+                color: #fff; 
+                border: none; 
+                border-radius: 5px; 
+                cursor: pointer; 
+                transition: background-color 0.3s; 
+            }
+            button:hover { background: #0056b3; }
+            p { margin-top: 20px; }
+        </style>
+    </head>
+    <body>
+        <h1>Python - Apache CGI</h1>
+        <button onclick="sendRequest()">Отправить GET-запрос</button>
+        <button onclick="sendInvalidRequest()">Отправить запрос с неподдерживаемым MIME</button>
+        <button onclick="sendMultipart()">Отправить multipart-запрос</button>
+        <p id="output"></p>
+
+        <script>
+            const output = document.getElementById('output');
+
+            function sendRequest() {
+                fetch("/api1?test=example&value=123")
+                    .then(response => response.json())
+                    .then(data => output.innerText = JSON.stringify(data, null, 2))
+                    .catch(err => output.innerText = "Ошибка: " + err);
+            }
+            function sendInvalidRequest() {
+                fetch("/api1", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/html' },
+                    body: "<p>Тестовый HTML</p>"
+                }).then(response => response.text())
+                    .then(data => output.innerText = data)
+                    .catch(err => output.innerText = "Ошибка: " + err);
+            }
+            function sendMultipart() {
+                const formData = new FormData();
+                formData.append("field1", "value1");
+                formData.append("field2", "value2");
+                fetch("/api1", {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                    .then(data => output.innerText = JSON.stringify(data, null, 2))
+                    .catch(err => output.innerText = "Ошибка: " + err);
+            }
+        </script>
+    </body>
+</html>
