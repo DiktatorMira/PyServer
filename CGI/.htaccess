@@ -1,2 +1,2 @@
 RewriteEngine on
-RewriteRule  ^api.+$  api1.py  [END,QSA]
+RewriteRule  .*  access_manager.py  [END,QSA]

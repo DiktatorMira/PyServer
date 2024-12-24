@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Test suite</title>
+    </head>
+    <body>
+        <button onclick="testGet()">GET</button>
+        <button onclick="testPost()">POST</button>
+        <p id="out"></p>
+        <script>
+            function testGet() {
+                fetch("http://cgi213.loc/user/")
+                    .then(response => response.json())
+                    .then(json => out.innerHTML = JSON.stringify(json));
+            }
+            function testPost() {
+                fetch("http://cgi213.loc/user/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        'user-name': 'Петрович',
+                        'user-email': 'user@i.ua',
+                        'user-password' : "user123"
+                    })
+                }).then(response => response.json())
+                .then(json => out.innerHTML = JSON.stringify(json, null, 2));
+            }
+        </script>
+    </body>
+</html>

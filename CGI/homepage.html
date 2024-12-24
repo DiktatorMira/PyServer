@@ -1,71 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CGI-213</title>
-</head>
-<body>
-    <h1>Python - Apache CGI</h1>
-    <p>
-        CGI - Common Gateway Interface - Інтерфейс спільного шлюзу -
-        набір вимог до веб-сервера щодо підтримки правил запуску
-        сторонніх скриптів
-    </p>
-    <button onclick="api1()">GET API-1</button>
-    <button onclick="api1p()">POST API-1</button>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <h1>home page</h1>
+        <p>CGI - Common Gateway Interface - Інтерфейс спільного шлюзу -
+        набір вимог дл веб-сервера щодо підтримки правил запуску
+        сторонніх скриптів</p>
+        <button onclick="api1()">API-1</button>
 
-    <h2>Registration</h2>
-    <form id="reg-form">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required value="Єґор"><br><br>
- 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required value="egor@i.ua"><br><br>
- 
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required value="Їваніч"><br><br>
- 
-        <label for="confirm_password">Confirm password:</label><br>
-        <input type="password" id="confirm_password" name="confirm_password" required value="Їваніч"><br><br>
- 
-        <button type="submit">Register</button>
-    </form>
-    <p id="out"></p>
+        <p id="out"></p>
 
-    <script>
-        document.addEventListener('submit', e => {
-            const form = e.target;
-            if(form.id == "reg-form") {
-                e.preventDefault();
-                fetch("/api/reg", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: new URLSearchParams(new FormData(form)).toString()
-                }).then(r => r.text())
+        <form id="reg-form">
+            <h2>Реєстрація нового користувача</h2>
+            <label for="username">Ім'я користувача:</label><br>
+            <input type="text" id="username" name="username" ><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" ><br><br>
+
+            <label for="password">Пароль:</label><br>
+            <input type="password" id="password" name="password" ><br><br>
+
+            <label for="confirm_password">Підтвердіть пароль:</label><br>
+            <input type="password" id="confirm_password" name="confirm_password" ><br><br>
+
+            <button type="submit">Зареєструватися</button>
+        </form>
+        <h1>CGI Testing</h1>
+        <button onclick="sendUnsupported()">Send Unsupported Type</button>
+        <button onclick="sendMultipart()">Send multipart/form-data</button>
+        <p id="output"></p>
+        <script>
+            document.addEventListener('submit', e => {
+                const form = e.target;
+                if(form.id == "reg-form") {
+                    e.preventDefault();
+                    fetch("/api/reg", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(new FormData(form)).toString()
+                    }).then(r => r.text()).then(t => out.innerHTML = t);
+                }
+            });
+            function sendUnsupported() {
+                fetch("/cgi-bin/api", {
+                    method: "POST",
+                    headers: { "Content-Type": "text/html" },
+                    body: "<p>This is not supported</p>"
+                }) .then(response => response.text())
+                .then(text => {
+                    document.getElementById("output").textContent = text;
+                }).catch(error => console.error(error));
+            }
+            function sendMultipart() {
+                const formData = new FormData();
+                formData.append("field1", "value1");
+                formData.append("field2", "value2");
+                fetch("/cgi-bin/api1.py", {
+                    method: "POST",
+                    headers: { "Content-Type": "multipart/form-data; boundary=----Boundary", },
+                    body: formData
+                }).then(response => response.text())
+                .then(text => {
+                    document.getElementById("output").textContent = text;
+                }).catch(error => console.error(error));
+            }
+            function api1() {
+                fetch("/api2?x=10&b=true&name=Єґор&&json")
+                .then(r => r.text())
                 .then(t => out.innerHTML = t);
             }
-        });
-
-        function api1() {
-            fetch("/api2?x=10&b=true&name=Єґор&&json").then(r => r.text()).then(t => out.innerHTML = t);
-        }
-        function api1p() {
-            fetch("/api/b", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': 0,
-                    'My-Header': 'My Value'
-                },
-                body: JSON.stringify({
-                    "name": "Єґор",
-                    "surname": "Їваніч"
-                })
-            })
-            .then(r => r.text())
-            .then(t => out.innerHTML = t);
-        }
-    </script>
-</body>
+            function api1p() {
+                fetch("/api/b", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': 0,
+                        'My-Header': 'My Value'
+                    },
+                    body: JSON.stringify({
+                        "name": "Єґор",
+                        "surname": "Їваніч"
+                    })
+                }).then(r => r.text()).then(t => out.innerHTML = t);
+            }
+        </script>
+    </body>
 </html>
