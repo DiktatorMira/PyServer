@@ -32,6 +32,7 @@
         <h1>CGI Testing</h1>
         <button onclick="sendUnsupported()">Send Unsupported Type</button>
         <button onclick="sendMultipart()">Send multipart/form-data</button>
+        <button onclick="sendRequest()">Отправить запрос</button>
         <p id="output"></p>
         <script>
             document.addEventListener('submit', e => {
@@ -86,6 +87,29 @@
                         "surname": "Їваніч"
                     })
                 }).then(r => r.text()).then(t => out.innerHTML = t);
+            }
+            function sendRequest() {
+                const url = '/api/details?param1=value1&param2=value2';
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Custom-Header': 'HeaderValue'
+                    },
+                    body: JSON.stringify({
+                        message: 'Пример',
+                        data: [1, 2, 3]
+                    })
+                }).then((response) => response.json()).then((data) => {
+                    const output = document.getElementById('output');
+                    output.innerHTML = `
+                        <p><strong>Метод:</strong> ${data.method}</p>
+                        <p><strong>Заголовки:</strong> ${JSON.stringify(data.headers, null, 2)}</p>
+                        <p><strong>Тело:</strong> ${JSON.stringify(data.body, null, 2)}</p>
+                        <p><strong>Параметры:</strong> ${JSON.stringify(data.queryParams, null, 2)}</p>
+                    `;
+                }).catch((error) => console.error('Ошибка:', error));
             }
         </script>
     </body>
